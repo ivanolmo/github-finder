@@ -1,15 +1,11 @@
-import { useEffect, useContext } from 'react';
+import { useContext } from 'react';
 
 import UserItem from './UserItem';
 import Spinner from '../layout/Spinner';
 import GithubContext from '../../context/github/GithubContext';
 
 function UserResultsList() {
-  const { users, isLoading, fetchUsers } = useContext(GithubContext);
-
-  useEffect(() => {
-    fetchUsers();
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  const { users, isLoading } = useContext(GithubContext);
 
   return isLoading ? (
     <Spinner />

@@ -2,7 +2,7 @@ import { useState, useContext } from 'react';
 import GithubContext from '../../context/github/GithubContext';
 
 function UserSearch() {
-  const { users } = useContext(GithubContext);
+  const { users, clearUsers, searchUsers } = useContext(GithubContext);
   const [text, setText] = useState('');
 
   const handleChange = (e) => setText(e.target.value);
@@ -12,12 +12,10 @@ function UserSearch() {
     if (text === '') {
       alert('Please enter a search term');
     } else {
-      // @todo - search users
+      searchUsers(text);
       setText('');
     }
   };
-
-  const clearText = () => setText('');
 
   return (
     <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-2 mb-8 gap-8'>
@@ -44,7 +42,7 @@ function UserSearch() {
       </div>
       <div>
         {users.length > 1 && (
-          <button className='btn btn-ghost btn-lg' onClick={clearText}>
+          <button className='btn btn-ghost btn-lg' onClick={clearUsers}>
             Clear
           </button>
         )}
