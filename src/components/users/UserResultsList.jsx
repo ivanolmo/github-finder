@@ -9,7 +9,7 @@ function UserResultsList() {
 
   useEffect(() => {
     fetchUsers();
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   return isLoading ? (
     <Spinner />
