@@ -11,6 +11,7 @@ export const GithubProvider = ({ children }) => {
     users: [],
     isLoading: false,
     user: {},
+    repos: [],
   };
 
   const [state, dispatch] = useReducer(githubReducer, initialState);
@@ -58,6 +59,27 @@ export const GithubProvider = ({ children }) => {
     }
   };
 
+  const getUserRepos = async (login) => {
+    setLoading();
+
+    const response = await fetch(`${GITHUB_URL}/users/${login}/repos`, {
+      headers: {
+        Authorization: `token ${GITHUB_TOKEN}`,
+      },
+    });
+
+    if (response.status === 404) {
+      window.location = '/notfound';
+    } else {
+      const data = await response.json();
+
+      dispatch({
+        type: 'GET_USER_REPOS',
+        payload: data,
+      });
+    }
+  };
+
   const clearUsers = () => dispatch({ type: 'CLEAR_RESULTS' });
 
   return (
@@ -66,9 +88,11 @@ export const GithubProvider = ({ children }) => {
         users: state.users,
         isLoading: state.isLoading,
         user: state.user,
+        repos: state.repos,
         clearUsers,
         searchUsers,
         getUser,
+        getUserRepos,
       }}
     >
       {children}
