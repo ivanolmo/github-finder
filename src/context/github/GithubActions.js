@@ -20,27 +20,16 @@ export const searchUsers = async (text) => {
   return response.data.items;
 };
 
-export const getUser = async (login) => {
-  const response = await github.get(`/users/${login}`);
-
-  if (response.status === 404) {
-    window.location = '/notfound';
-  } else {
-    return response.data;
-  }
-};
-
-export const getUserRepos = async (login) => {
+export const getUserAndRepos = async (login) => {
   const params = new URLSearchParams({
     sort: 'created',
     per_page: 10,
   });
 
-  const response = await github.get(`/users/${login}/repos?${params}`);
+  const [user, repos] = await Promise.all([
+    github.get(`/users/${login}`),
+    github.get(`/users/${login}/repos?${params}`),
+  ]);
 
-  if (response.status === 404) {
-    window.location = '/notfound';
-  } else {
-    return response.data;
-  }
+  return { user: user.data, repos: repos.data };
 };
